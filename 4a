@@ -1,55 +1,148 @@
-import 'package:flutter/material.dart'; 
- void main() { 
-  runApp(MyApp()); 
-} 
-class MyApp extends StatelessWidget { 
-  const MyApp({super.key}); 
- 
-  @override 
-  Widget build(BuildContext context) { 
-    return MaterialApp( 
-      home: HomeScreen(), 
-    ); 
-  } 
-} 
-class HomeScreen extends StatelessWidget { 
-  const HomeScreen({super.key}); 
- 
-  @override 
-  Widget build(BuildContext context) { 
-    return Scaffold( 
-      appBar: AppBar( 
-        title: Text('Home screen'), 
-      ), 
-      body: Center( 
-        child: ElevatedButton( 
-          onPressed: () { 
-            Navigator.push( 
-              context, 
-              MaterialPageRoute(builder: (context) => SecondScreen()), 
-            ); 
-          }, 
-          child: Text('Go to Second Screen'), 
-        ), 
-      ), 
-    ); 
-  } 
-} 
-class SecondScreen extends StatelessWidget { 
-  const SecondScreen({super.key}); 
- 
-  @override 
-  Widget build(BuildContext context) { 
-    return Scaffold( 
-      appBar: AppBar( 
-        title: Text('Second screen'), 
-      ), 
-      body: ElevatedButton( 
-        onPressed: () { 
-          Navigator.pop(context); 
-        }, 
-        child: Text('Go back to Home screen'), 
-      ), 
-    ); 
-  } 
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
 }
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Simple Form Example'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SimpleForm(),
+        ),
+      ),
+    );
+  }
+}
+
+class SimpleForm extends StatefulWidget {
+  @override
+  _SimpleFormState createState() => _SimpleFormState();
+}
+
+class _SimpleFormState extends State<SimpleForm> {
+  final _nameController = TextEditingController();
+  final _ageController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        TextField(
+          controller: _nameController,
+          decoration: InputDecoration(labelText: 'Name'),
+        ),
+        TextField(
+          controller: _ageController,
+          decoration: InputDecoration(labelText: 'Age'),
+          keyboardType: TextInputType.number,
+        ),
+        SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: () {
+final name = _nameController.text;
+            final age = _ageController.text;
+            print('Name: $name, Age: $age');
+          },
+          child: Text('Submit'),
+        ),
+      ],
+    );
+  }
+}
+
+
+
+7 b) Implement form validation and error handling.
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Simple Form with Validation'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SimpleForm(),
+        ),
+      ),
+    );
+  }
+}
+
+class SimpleForm extends StatefulWidget {
+  @override
+  _SimpleFormState createState() => _SimpleFormState();
+}
+
+class _SimpleFormState extends State<SimpleForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  final _nameController = TextEditingController();
+  final _ageController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            controller: _nameController,
+            decoration: InputDecoration(labelText: 'Name'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your name';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
+            controller: _ageController,
+            decoration: InputDecoration(labelText: 'Age'),
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your age';
+             }
+              final age = int.tryParse(value);
+              if (age == null || age <= 0) {
+                return 'Please enter a valid age';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              if (_formKey.currentState?.validate() ?? false) {
+final name = _nameController.text;
+                final age = _ageController.text;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Name: $name, Age: $age')),
+                );
+              }
+            },
+            child: Text('Submit'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
