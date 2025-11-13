@@ -28,6 +28,8 @@ class SimpleForm extends StatefulWidget {
 
 class _SimpleFormState extends State<SimpleForm> {
   final _nameController = TextEditingController();
+  final _branchController = TextEditingController();
+  final _sectionController = TextEditingController();
   final _ageController = TextEditingController();
 
   @override
@@ -35,21 +37,42 @@ class _SimpleFormState extends State<SimpleForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        // Name Field
         TextField(
           controller: _nameController,
           decoration: InputDecoration(labelText: 'Name'),
         ),
+
+        // Branch Field
+        TextField(
+          controller: _branchController,
+          decoration: InputDecoration(labelText: 'Branch'),
+        ),
+
+        // Section Field
+        TextField(
+          controller: _sectionController,
+          decoration: InputDecoration(labelText: 'Section'),
+        ),
+
+        // Age Field
         TextField(
           controller: _ageController,
           decoration: InputDecoration(labelText: 'Age'),
           keyboardType: TextInputType.number,
         ),
+
         SizedBox(height: 20),
+
+        // Submit Button
         ElevatedButton(
           onPressed: () {
-final name = _nameController.text;
+            final name = _nameController.text;
+            final branch = _branchController.text;
+            final section = _sectionController.text;
             final age = _ageController.text;
-            print('Name: $name, Age: $age');
+
+            print('Name: $name, Branch: $branch, Section: $section, Age: $age');
           },
           child: Text('Submit'),
         ),
@@ -57,6 +80,7 @@ final name = _nameController.text;
     );
   }
 }
+
 
 
 
